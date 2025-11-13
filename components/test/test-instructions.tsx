@@ -7,11 +7,19 @@ import {
   Button,
 } from "@chakra-ui/react";
 
+import useLanguageStore from "../../store/use-language-store";
+import { getTranslation } from "../../lib/i18n";
+
 interface TestInstructionsProps {
   onCloseTestInstructions: () => void;
 }
 
 export default function TestInstructions(props: TestInstructionsProps) {
+  const { language, _hasHydrated } = useLanguageStore();
+  // 在 hydration 完成前使用默认语言 "en" 以避免 hydration 错误
+  const effectiveLanguage = _hasHydrated ? language : "en";
+  const t = getTranslation(effectiveLanguage);
+
   return (
     <Flex
       h="full"
@@ -19,27 +27,16 @@ export default function TestInstructions(props: TestInstructionsProps) {
       direction="column"
       gap={8}
     >
-      <Heading>Instructions</Heading>
+      <Heading>{t.instructions.title}</Heading>
       <Flex
         direction="column"
         gap={2}
       >
-        <Text>
-          Completing the test should only take 15 minutes or so. Here is several
-          hints about how to complete this test:
-        </Text>
+        <Text>{t.instructions.intro}</Text>
         <UnorderedList spacing={2}>
-          <ListItem>
-            There are no right answers to any of these questions.
-          </ListItem>
-          <ListItem>
-            Answer the questions quickly, do not over-analyze them. Some seem
-            worded poorly. Go with what feels best.
-          </ListItem>
-          <ListItem>
-            Answer the questions as “the way you are”, not “the way you’d like
-            to be seen by others”.
-          </ListItem>
+          {t.instructions.hints.map((hint, index) => (
+            <ListItem key={index}>{hint}</ListItem>
+          ))}
         </UnorderedList>
       </Flex>
       <Button
@@ -48,7 +45,7 @@ export default function TestInstructions(props: TestInstructionsProps) {
         alignSelf="flex-end"
         onClick={props.onCloseTestInstructions}
       >
-        Okay, I got it!
+        {t.instructions.confirm}
       </Button>
     </Flex>
   );

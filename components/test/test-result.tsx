@@ -17,15 +17,47 @@ import {
   TestResult as ITestResult,
   getPersonalityClassGroupByTestScores,
 } from "../../lib/personality-test";
+import useLanguageStore from "../../store/use-language-store";
+import { getTranslation } from "../../lib/i18n";
+import { translatePersonalityClassGroup } from "../../lib/translate-personality-result";
 
 interface TestResultProps {
   testResult: ITestResult;
 }
 
 export default function TestResult(props: TestResultProps) {
-  const personalityClassGroup = getPersonalityClassGroupByTestScores(
-    props.testResult.testScores
+  const { language, _hasHydrated } = useLanguageStore();
+  // 在 hydration 完成前使用默认语言 "en" 以避免 hydration 错误
+  const effectiveLanguage = _hasHydrated ? language : "en";
+  const t = getTranslation(effectiveLanguage);
+
+  const personalityClassGroupRaw = getPersonalityClassGroupByTestScores(
+    props.testResult.testScores,
+    effectiveLanguage
   );
+
+  const personalityClassGroup =
+    translatePersonalityClassGroup(personalityClassGroupRaw, effectiveLanguage) ??
+    personalityClassGroupRaw;
+
+  if (!personalityClassGroup) {
+    return (
+      <Flex
+        my={4}
+        w={{
+          base: "full",
+          lg: "50%",
+        }}
+        h="full"
+        px={8}
+        gap={4}
+        alignItems="center"
+        direction="column"
+      >
+        <Text>{t.result.notFound}</Text>
+      </Flex>
+    );
+  }
 
   return (
     <Flex
@@ -96,30 +128,30 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        Jungian Functional Preference Ordering
+        {t.result.sections.jungianFunctionalPreferenceOrdering}
       </Heading>
       <Table>
         <Tbody>
           <Tr>
-            <Th>Dominant</Th>
+            <Th>{t.result.tableHeaders.dominant}</Th>
             <Td>
               {personalityClassGroup.jungianFunctionalPreference.dominant}
             </Td>
           </Tr>
           <Tr>
-            <Th>Auxiliary</Th>
+            <Th>{t.result.tableHeaders.auxiliary}</Th>
             <Td>
               {personalityClassGroup.jungianFunctionalPreference.auxiliary}
             </Td>
           </Tr>
           <Tr>
-            <Th>Tertiary</Th>
+            <Th>{t.result.tableHeaders.tertiary}</Th>
             <Td>
               {personalityClassGroup.jungianFunctionalPreference.tertiary}
             </Td>
           </Tr>
           <Tr>
-            <Th>Inferior</Th>
+            <Th>{t.result.tableHeaders.inferior}</Th>
             <Td>
               {personalityClassGroup.jungianFunctionalPreference.inferior}
             </Td>
@@ -134,7 +166,7 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        {`${personalityClassGroup.type} General Traits`}
+        {`${personalityClassGroup.type} ${t.result.sections.generalTraits}`}
       </Heading>
       <UnorderedList>
         {personalityClassGroup.generalTraits.map((trait, index) => (
@@ -155,7 +187,7 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        Relationship Strengths
+        {t.result.sections.relationshipStrengths}
       </Heading>
       <UnorderedList w="full">
         {personalityClassGroup.relationshipStrengths.map(
@@ -178,7 +210,7 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        Relationship Weaknesses
+        {t.result.sections.relationshipWeaknesses}
       </Heading>
       <UnorderedList w="full">
         {personalityClassGroup.relationshipWeaknesses.map(
@@ -201,7 +233,7 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        Success Definition
+        {t.result.sections.successDefinition}
       </Heading>
       {personalityClassGroup.successDefinition
         .split(/\.\n+/g)
@@ -226,7 +258,7 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        Strengths
+        {t.result.sections.strengths}
       </Heading>
       <UnorderedList w="full">
         {personalityClassGroup.strengths.map((strength, index) => (
@@ -247,7 +279,7 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        Special Gifts
+        {t.result.sections.specialGifts}
       </Heading>
       <UnorderedList w="full">
         {personalityClassGroup.gifts.map((gift, index) => (
@@ -268,7 +300,7 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        Potential Problem Areas
+        {t.result.sections.potentialProblemAreas}
       </Heading>
       {personalityClassGroup.potentialProblemAreas.length === 1 ? (
         personalityClassGroup.potentialProblemAreas[0]
@@ -310,7 +342,7 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        Explanation of Problems
+        {t.result.sections.explanationOfProblems}
       </Heading>
       {personalityClassGroup.explanationOfProblems
         .split(/\.\n+/g)
@@ -336,7 +368,7 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        Solutions
+        {t.result.sections.solutions}
       </Heading>
       {personalityClassGroup.solutions
         .split(/\.\n+/g)
@@ -358,7 +390,7 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        Living Happily Tips
+        {t.result.sections.livingHappilyTips}
       </Heading>
       {personalityClassGroup.livingHappilyTips
         .split(/\.\n+/g)
@@ -383,7 +415,7 @@ export default function TestResult(props: TestResultProps) {
               size="md"
               textAlign="center"
             >
-              Specific Suggestions
+            {t.result.sections.specificSuggestions}
             </Heading>
             {personalityClassGroup.suggestions[0]
               .split(/\.\n+/g)
@@ -412,7 +444,7 @@ export default function TestResult(props: TestResultProps) {
               size="md"
               textAlign="center"
             >
-              Specific Suggestions
+            {t.result.sections.specificSuggestions}
             </Heading>
             <UnorderedList w="full">
               {personalityClassGroup.suggestions!.map((suggestion, index) => (
@@ -435,7 +467,7 @@ export default function TestResult(props: TestResultProps) {
         size="md"
         textAlign="center"
       >
-        Ten Rules to Live to Achieve Success
+        {t.result.sections.tenRulesToLive}
       </Heading>
       <UnorderedList w="full">
         {personalityClassGroup.tenRulesToLive.map((rule, index) => (

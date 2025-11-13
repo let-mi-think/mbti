@@ -9,9 +9,15 @@ import {
   TestResult,
   getAllSavedTestResult,
 } from "../../../../lib/personality-test";
+import useLanguageStore from "../../../../store/use-language-store";
+import { getTranslation } from "../../../../lib/i18n";
 
 export default function TestResultHistoryPage() {
   const router = useRouter();
+  const { language, _hasHydrated } = useLanguageStore();
+  // 在 hydration 完成前使用默认语言 "en" 以避免 hydration 错误
+  const effectiveLanguage = _hasHydrated ? language : "en";
+  const t = getTranslation(effectiveLanguage);
 
   const [testResults, setTestResults] = useState<
     AsyncData<Result<Option<TestResult[]>, Error>>
@@ -30,15 +36,15 @@ export default function TestResultHistoryPage() {
   return (
     <MainLayout>
       {testResults.match({
-        NotAsked: () => <Text>Loading</Text>,
-        Loading: () => <Text>Loading</Text>,
+        NotAsked: () => <Text>{t.common.loading}</Text>,
+        Loading: () => <Text>{t.common.loading}</Text>,
         Done: (result) =>
           result.match({
-            Error: () => <Text>Something went wrong! Please refresh!</Text>,
+            Error: () => <Text>{t.common.error}</Text>,
             Ok: (value) =>
               value.match({
                 Some: (data) => <TestResultHistory testResults={data} />,
-                None: () => <Text>No Data</Text>,
+                None: () => <Text>{t.history.noResults}</Text>,
               }),
           }),
       })}

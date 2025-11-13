@@ -3,9 +3,15 @@ import { MouseEvent, useState, useEffect } from "react";
 import { Flex, Text, UnorderedList, ListItem } from "@chakra-ui/react";
 
 import useHeadingsObserver from "../../hooks/use-headings-observer";
+import useLanguageStore from "../../store/use-language-store";
+import { getTranslation } from "../../lib/i18n";
 
 export default function TestResultTableOfContent() {
   const { activeId, setActiveId } = useHeadingsObserver();
+  const { language, _hasHydrated } = useLanguageStore();
+  // 在 hydration 完成前使用默认语言 "en" 以避免 hydration 错误
+  const effectiveLanguage = _hasHydrated ? language : "en";
+  const t = getTranslation(effectiveLanguage);
 
   const [headings, setHeadings] = useState<
     {
@@ -48,7 +54,7 @@ export default function TestResultTableOfContent() {
       pos="sticky"
       alignSelf="flex-start"
     >
-      <Text fontWeight="bold">Table Of Content</Text>
+      <Text fontWeight="bold">{t.result.tableOfContentTitle}</Text>
       <UnorderedList
         spacing={2}
         listStyleType="none"

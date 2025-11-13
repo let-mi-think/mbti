@@ -1,6 +1,8 @@
 import { PersonalityClassGroup } from "../lib/personality-test";
+import type { Language } from "../lib/i18n";
 
-export const personalityClassGroup: PersonalityClassGroup[] = [
+const personalityClassGroupsTranslations: Record<Language, PersonalityClassGroup[]> = {
+  en: [
   {
     type: "ENFJ",
     name: "Extraverted Intuitive Feeling Judging",
@@ -4841,4 +4843,165 @@ offer you. Try to identify their personality types.`,
 the best, and the best will come.`,
     ],
   },
-];
+  ],
+  // TODO: 添加中文版本的 personality class groups 数据
+  zh: [
+    {
+      type: "ENFJ",
+      name: "外向直觉情感判断型",
+      nameDescription: "外向情感配合内向直觉",
+      epithet: "给予者",
+      description: `作为 ENFJ，你主要通过外向情感来理解世界，并以个人价值体系来判断事物。你的辅助功能是内向直觉，帮助你洞察人心与未来发展。ENFJ 天生具备强烈的感染力与组织力，喜欢投入人群，擅长鼓励、协调与引导他人。你注重人际关系的和谐，乐于看到他人因你的支持而成长。与此同时，过度关注他人可能让你忽视自身需求，或在独处时感到空虚与焦虑。学会在关怀他人、照顾自己之间找到平衡，是持续发挥优势的关键。`,
+      jungianFunctionalPreference: {
+        dominant: "外向情感",
+        auxiliary: "内向直觉",
+        tertiary: "外向感觉",
+        inferior: "内向思考",
+      },
+      generalTraits: [
+        "真诚热情，乐于与人建立连结",
+        "敏锐洞察他人的情绪与需求",
+        "乐于规划、组织并维持结构与秩序",
+        "追求团队和谐，善于调解矛盾",
+        "擅长沟通表达，行动力强、节奏快",
+        "极具感染力，能激励他人采取行动",
+        "容易将自身价值建立在他人回馈之上",
+        "在独处时可能感到焦虑或自我怀疑",
+      ],
+      relationshipStrengths: [
+        "表达能力佳，擅长倾听与回应",
+        "洞察他人的动机并给予恰当支持",
+        "积极营造双赢关系，重视长期承诺",
+        "乐观活泼，能为关系注入正面能量",
+        "乐于为伴侣或家人付出与规划",
+      ],
+      relationshipWeaknesses: [
+        "可能过度关注对方而忽视自身需求",
+        "面对冲突容易退缩或自责",
+        "若得不到肯定，情绪波动会加剧",
+        "过度投入时，界限感较弱",
+      ],
+      successDefinition: "当能够支持他人成长、为团队营造凝聚力，并在过程中保持自我价值感时，ENFJ 会感到最有成就感。",
+      strengths: [
+        "擅长沟通协调，能快速建立信任",
+        "富同理心，能看见他人的潜能",
+        "具有策略与组织能力",
+        "热情主动，乐于承担责任",
+      ],
+      gifts: [
+        "能精准传达愿景，激励他人朝目标前进",
+        "乐于分享资源，让团队更有活力",
+        "懂得营造温暖氛围，建立归属感",
+      ],
+      potentialProblemAreas: [
+        "过度承担他人情绪压力，导致倦怠",
+        "难以拒绝他人请求，易被利用",
+        "过度理想化关系，忽略现实差异",
+        "在压力下可能出现控制欲或情绪化反应",
+      ],
+      explanationOfProblems: "当 ENFJ 长期忽视自身感受，而只关注外界期望时，内在的不平衡会让他们感到枯竭、迷失方向，甚至怀疑自己的价值。若缺乏及时的自我照顾，可能陷入过度讨好、过劳或情绪波动。",
+      solutions: `学习设定界限，定期检视自身情绪与需求；以对话代替揣测，给自己留白与独处的时间；在付出与接纳之间取得平衡，建立健康、可持续的支持关系。`,
+      livingHappilyTips: `培养能真正滋养自己的嗜好；与可靠的朋友分享内心，不必总是扮演领袖；善用写作、冥想等方式整理情绪；练习用简单直接的方式表达真实需求。`,
+      specificSuggestions: [
+        "每天留一点时间关注当下感受与身体状态",
+        "在接手新任务前，先评估是否会超出能量范围",
+        "与重要他人讨论彼此对支持与空间的期待",
+        "持续学习领导力与心理健康相关知识",
+      ],
+      tenRulesToLive: [
+        "照顾好自己，才能持续照顾他人",
+        "设定界限并勇敢说“不”",
+        "相信直觉，但也尊重事实",
+        "适度放慢节奏，享受独处时光",
+        "保持乐观，但不要忽视现实困难",
+        "真实地表达情感与需求",
+        "坚持学习，让内在保持丰盛",
+        "尊重彼此差异，鼓励多元观点",
+        "为自己设立可实现的小目标",
+        "与信任的人建立支持网络",
+      ],
+    },
+    {
+      type: "INFJ",
+      name: "内向直觉情感判断型",
+      nameDescription: "内向直觉配合外向情感",
+      epithet: "提倡者",
+      description: `作为 INFJ，你以内向直觉洞察事物本质，以外向情感关怀周遭人群。你常能看到他人未察觉的可能性，并以坚定的价值观推动改变。INFJ 在安静中思索，在人群中给予；他们注重理想与意义，也希望人际关系真诚而深刻。若长期压抑自我或忽略身心界限，可能变得疲惫或退缩。找到可靠的出口表达愿景与情绪，是保持平衡的关键。`,
+      jungianFunctionalPreference: {
+        dominant: "内向直觉",
+        auxiliary: "外向情感",
+        tertiary: "内向思考",
+        inferior: "外向感觉",
+      },
+      generalTraits: [
+        "理想主义者，重视真诚与意义",
+        "洞察力强，擅长从整体看趋势",
+        "富有同理心，关怀他人成长",
+        "内敛稳重，偏好深度交流",
+        "在价值被忽视时容易失落",
+        "对环境氛围敏感，需规律独处充电",
+      ],
+      relationshipStrengths: [
+        "愿意投入时间理解伴侣的梦想与恐惧",
+        "擅长倾听，提供温柔而深刻的回应",
+        "忠诚可靠，渴望建立长久关系",
+        "具备洞察冲突根源的能力",
+      ],
+      relationshipWeaknesses: [
+        "容易把理想投射到对方身上",
+        "不愿表露负面情绪，久而久之可能爆发",
+        "对不真诚或不一致极度敏感",
+      ],
+      successDefinition: "当 INFJ 能在真实表达自我的同时，为社会或身边的人带来正向影响，并与内心价值保持一致时，他们会感到真正的满足。",
+      strengths: [
+        "善于策划长远愿景并引导他人前行",
+        "表达细腻，能触及他人内心",
+        "自律专注，愿意为意义付出",
+        "能在复杂情境中保持洞见",
+      ],
+      gifts: [
+        "让他人感到被理解与肯定",
+        "能在团队中担任催化者与协调者",
+        "具备良好文字与语言表达能力",
+      ],
+      potentialProblemAreas: [
+        "忽略现实限制而感到挫折",
+        "过度压抑情绪，导致身心疲惫",
+        "担心冲突而避免表达真实想法",
+      ],
+      explanationOfProblems: "当 INFJ 长期为了维持和谐而压抑真实想法，或持续投入价值观不一致的环境时，会感到能量被抽离，内在逐渐空虚。缺乏适当的情绪表达与支持，会让他们更难信任自己与他人。",
+      solutions: `练习明确表达界限与期待；在理想与现实间寻找折衷策略；定期与可信赖的伙伴讨论自己的感受与计划，以获得回馈与支持。`,
+      livingHappilyTips: `安排固定的独处与创作时间；寻找志同道合的社群分享愿景；善待自己的节奏，不必随波逐流；通过写作或创意活动释放情绪。`,
+      specificSuggestions: [
+        "建立每日或每周的反思与记录习惯",
+        "区分可以掌控与无法掌控之事",
+        "在关系中勇敢提出真实需求",
+        "持续学习心理与沟通相关技能",
+      ],
+      tenRulesToLive: [
+        "忠于自己的价值观",
+        "给予自己适当的空间与时间",
+        "与信任的人保持深度对话",
+        "在理想与现实间找到平衡",
+        "保持好奇与开放，拥抱变化",
+        "练习表达真实情绪",
+        "照顾身体，让能量维持稳定",
+        "庆祝小小的进步与成果",
+        "遇到困难时寻求支持",
+        "把愿景化为行动，一步一步前进",
+      ],
+    },
+  ],
+};
+
+export function getPersonalityClassGroups(language: Language = "en"): PersonalityClassGroup[] {
+  // 如果中文数据不存在，使用英文数据并通过翻译函数处理
+  if (language === "zh" && personalityClassGroupsTranslations.zh.length === 0) {
+    // 返回英文数据，将在组件中通过翻译函数处理
+    return personalityClassGroupsTranslations.en;
+  }
+  return personalityClassGroupsTranslations[language];
+}
+
+// 保持向后兼容
+export const personalityClassGroup = personalityClassGroupsTranslations.en;

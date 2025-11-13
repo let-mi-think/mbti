@@ -1,7 +1,15 @@
 import Link from "next/link";
 import { Flex, Text, Button } from "@chakra-ui/react";
 
+import useLanguageStore from "../../store/use-language-store";
+import { getTranslation } from "../../lib/i18n";
+
 export default function Footer() {
+  const { language, _hasHydrated } = useLanguageStore();
+  // 在 hydration 完成前使用默认语言 "en" 以避免 hydration 错误
+  const effectiveLanguage = _hasHydrated ? language : "en";
+  const t = getTranslation(effectiveLanguage);
+
   return (
     <Flex
       as="footer"
@@ -15,32 +23,10 @@ export default function Footer() {
       alignItems="center"
     >
       <Text>
-        All test on this website is based on this{" "}
-        <Link
-          href="http://www.lrjj.cn/encrm1.0/public/upload/MBTI-personality-test.pdf"
-          target="_blank"
-        >
-          <Button
-            colorScheme="primary"
-            variant="link"
-          >
-            source
-          </Button>
-        </Link>
+        {t.footer.sourceText}{" "}
       </Text>
       <Text>
-        🔨 Made by{" "}
-        <Link
-          href="https://github.com/rauf-21"
-          target="_blank"
-        >
-          <Button
-            colorScheme="primary"
-            variant="link"
-          >
-            rauf-21
-          </Button>
-        </Link>
+        🔨 {t.footer.madeBy}{" "}
       </Text>
     </Flex>
   );

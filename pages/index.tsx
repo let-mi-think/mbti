@@ -1,10 +1,29 @@
 import Link from "next/link";
-import { Heading, Text, Highlight, Flex, Button } from "@chakra-ui/react";
+import { useState } from "react";
+import {
+  Heading,
+  Text,
+  Highlight,
+  Flex,
+  Button,
+  Checkbox,
+  Tooltip,
+  VStack,
+  Link as ChakraLink,
+} from "@chakra-ui/react";
 import { FiArrowRight } from "react-icons/fi";
 
 import MainLayout from "../components/layouts/main-layout";
+import useLanguageStore from "../store/use-language-store";
+import { getTranslation } from "../lib/i18n";
 
 export default function HomePage() {
+  const { language, _hasHydrated } = useLanguageStore();
+  // 在 hydration 完成前使用默认语言 "en" 以避免 hydration 错误
+  const effectiveLanguage = _hasHydrated ? language : "en";
+  const t = getTranslation(effectiveLanguage);
+  const [hasAcceptedPrivacy, setHasAcceptedPrivacy] = useState(false);
+
   return (
     <>
       <MainLayout>
@@ -27,7 +46,7 @@ export default function HomePage() {
             textAlign="center"
           >
             <Highlight
-              query="MBTI Personality Test"
+              query={effectiveLanguage === "zh" ? "MBTI 性格测试" : "MBTI Personality Test"}
               styles={{
                 py: 1,
                 px: 4,
@@ -36,25 +55,53 @@ export default function HomePage() {
                 color: "white",
               }}
             >
-              Welcome to MBTI Personality Test
+              {t.home.welcome}
             </Highlight>
           </Heading>
           <Text
             fontSize="xl"
             align="center"
           >
-            Learn to know yourself better with this personality test.
+            {t.home.description}
           </Text>
-          <Link href="/test">
-            <Button
-              w="min-content"
-              colorScheme="primary"
-              variant="outline"
-              rightIcon={<FiArrowRight size={20} />}
-            >
-              Take Test
-            </Button>
-          </Link>
+          <VStack spacing={2} align="stretch">
+            <Text fontSize="sm" color="gray.600" textAlign="center">
+              {t.home.questionSource}
+            </Text>
+            <Text fontSize="sm" color="gray.600" textAlign="center">
+              {t.home.freeForAll}
+            </Text>
+          </VStack>
+          <Checkbox
+            colorScheme="primary"
+            isChecked={hasAcceptedPrivacy}
+            onChange={(event) => setHasAcceptedPrivacy(event.target.checked)}
+          >
+            <Text fontSize="sm">
+              {t.home.privacyAgreement}{" "}
+              <ChakraLink as={Link} href="/privacy-policy" color="primary.500">
+                {t.home.privacyPolicy}
+              </ChakraLink>
+            </Text>
+          </Checkbox>
+          <Tooltip
+            label={!hasAcceptedPrivacy ? t.home.startButtonTooltip : undefined}
+            isDisabled={hasAcceptedPrivacy}
+          >
+            <span>
+              <Link href="/test">
+                <Button
+                  w="min-content"
+                  colorScheme="primary"
+                  variant="outline"
+                  rightIcon={<FiArrowRight size={20} />}
+                  isDisabled={!hasAcceptedPrivacy}
+                >
+                  {t.home.takeTest}
+                </Button>
+              </Link>
+            </span>
+          </Tooltip>
         </Flex>
       </MainLayout>
     </>

@@ -1,7 +1,9 @@
 import { Flex, Text, Heading } from "@chakra-ui/react";
 
-import { personalityClasses } from "../../data/personality-classes";
+import { getPersonalityClasses } from "../../data/personality-classes";
 import { PersonalityClass, TestResult } from "../../lib/personality-test";
+import useLanguageStore from "../../store/use-language-store";
+import { getTranslation } from "../../lib/i18n";
 
 interface TestResultStatsProps {
   testResult: TestResult;
@@ -36,6 +38,12 @@ function ScoreStats(props: {
 }
 
 export default function TestResultStats(props: TestResultStatsProps) {
+  const { language, _hasHydrated } = useLanguageStore();
+  // 在 hydration 完成前使用默认语言 "en" 以避免 hydration 错误
+  const effectiveLanguage = _hasHydrated ? language : "en";
+  const t = getTranslation(effectiveLanguage);
+  const personalityClasses = getPersonalityClasses(effectiveLanguage);
+
   const statsColorScheme = [
     "red",
     "blue",
@@ -71,7 +79,7 @@ export default function TestResultStats(props: TestResultStatsProps) {
         textAlign="center"
         fontSize="lg"
       >
-        Scores
+        {t.result.statsTitle}
       </Heading>
       {personalityClasses.map((personalityClass, index) => (
         <Flex

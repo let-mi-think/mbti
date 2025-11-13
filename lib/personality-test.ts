@@ -1,7 +1,9 @@
 import { openDB } from "idb";
 import { Option, Future, Result } from "@swan-io/boxed";
 import { personalityTest } from "../data/personality-test";
-import { personalityClassGroup } from "../data/personality-class-groups";
+import { personalityTestZh } from "../data/personality-test-zh";
+import { getPersonalityClassGroups } from "../data/personality-class-groups";
+import type { Language } from "./i18n";
 
 export interface TestQuestion {
   no: number;
@@ -101,11 +103,17 @@ async function getDb() {
   return db;
 }
 
+export function getPersonalityTest(language: Language = "en"): TestQuestion[] {
+  return language === "zh" ? personalityTestZh : personalityTest;
+}
+
 export function getQuestionAnswerScore(
   questionNumber: number,
-  answerOption: TestAnswerOption["type"]
+  answerOption: TestAnswerOption["type"],
+  language: Language = "en"
 ) {
-  const question = personalityTest.find(
+  const testData = getPersonalityTest(language);
+  const question = testData.find(
     (question) => question.no === questionNumber
   )!;
 
@@ -114,7 +122,8 @@ export function getQuestionAnswerScore(
 }
 
 export function getPersonalityClassGroupByTestScores(
-  testScores: PersonalityClass["type"][]
+  testScores: PersonalityClass["type"][],
+  language: Language = "en"
 ) {
   const scoreCount = testScores.reduce(
     (acc, score) => {
@@ -141,7 +150,8 @@ export function getPersonalityClassGroupByTestScores(
     scoreCount.T >= scoreCount.F ? "T" : "F"
   }${scoreCount.J >= scoreCount.P ? "J" : "P"}`;
 
-  return personalityClassGroup.find(
+  const personalityClassGroups = getPersonalityClassGroups(language);
+  return personalityClassGroups.find(
     ({ type }) => personalityClassGroupType === type
   )!;
 }
