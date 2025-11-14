@@ -1,0 +1,6 @@
+# Vercel ignore file
+.idea/
+*.log
+.DS_Store
+node_modules/
+
