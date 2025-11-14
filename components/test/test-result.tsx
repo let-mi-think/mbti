@@ -19,7 +19,6 @@ import {
 } from "../../lib/personality-test";
 import useLanguageStore from "../../store/use-language-store";
 import { getTranslation } from "../../lib/i18n";
-import { translatePersonalityClassGroup } from "../../lib/translate-personality-result";
 
 interface TestResultProps {
   testResult: ITestResult;
@@ -31,33 +30,10 @@ export default function TestResult(props: TestResultProps) {
   const effectiveLanguage = _hasHydrated ? language : "en";
   const t = getTranslation(effectiveLanguage);
 
-  const personalityClassGroupRaw = getPersonalityClassGroupByTestScores(
+  const personalityClassGroup = getPersonalityClassGroupByTestScores(
     props.testResult.testScores,
-    effectiveLanguage
+    "en" // 始终使用英文数据
   );
-
-  const personalityClassGroup =
-    translatePersonalityClassGroup(personalityClassGroupRaw, effectiveLanguage) ??
-    personalityClassGroupRaw;
-
-  if (!personalityClassGroup) {
-    return (
-      <Flex
-        my={4}
-        w={{
-          base: "full",
-          lg: "50%",
-        }}
-        h="full"
-        px={8}
-        gap={4}
-        alignItems="center"
-        direction="column"
-      >
-        <Text>{t.result.notFound}</Text>
-      </Flex>
-    );
-  }
 
   return (
     <Flex
